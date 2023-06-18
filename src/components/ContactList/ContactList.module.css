@@ -1,0 +1,41 @@
+.contactContainer {
+  margin-top: 10px;
+}
+
+.contactsList {
+  list-style: none;
+  display: flex;
+}
+
+.contactItem {
+  display: flex;
+  align-items: center;
+}
+
+.contactListItem {
+  display: flex;
+  align-items: center;
+  font-size: 32px;
+}
+
+.contactListItemBtn {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: rgba(31, 236, 110, 0.8);
+  border: none;
+  border-radius: 6px;
+  font-size: 18px;
+  height: 36px;
+  line-height: 20px;
+  margin-left: 8px;
+  margin-right: 6px;
+  min-width: 50px;
+  padding: 0 18px 0 18px;
+  color: white;
+  cursor: pointer;
+}
+
+.contactListItemBtn:hover {
+  background-color: rgb(187, 224, 221);
+  cursor: pointer;
+}

@@ -1,0 +1,38 @@
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.formName,
+.formNumber {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 25px;
+  padding-bottom: 15px;
+}
+
+.formBtn {
+  margin-top: 30px;
+  margin-bottom: 20px;
+  background-color: rgba(177, 180, 185, 0.8);
+  border: none;
+  border-radius: 8px;
+  color: #000;
+  font-weight: 600;
+  font-size: 15px;
+  height: 40px;
+  margin-left: 6px;
+  margin-right: 6px;
+  min-width: 180px;
+  padding: 0 12px 0 12px;
+  cursor: pointer;
+      width: 20%;
+        margin: 15px auto;
+      
+}
+
+.formBtn:hover {
+  background-color: rgb(225, 225, 230);
+  cursor: pointer;
+}
