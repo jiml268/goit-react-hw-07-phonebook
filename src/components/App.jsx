@@ -1,19 +1,21 @@
 import { useState, useEffect } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+// import { v4 as uuidv4 } from 'uuid';
 import { ContactForm } from './ContactForm/ContactForm';
 import { Filter } from './Filter/Filter'
 import { ContactList } from './ContactList/ContactList';
+import { useSelector, useDispatch } from 'react-redux';
+import { getContacts } from 'redux/selectors';
+import { fetchContacts } from 'redux/operators';
 export const App = () => {
 
-const [contacts, setContacts] = useState(() => {
-    return JSON.parse(localStorage.getItem("contacts")) ?? [];
-  });
-
   const [filter, setFilter] = useState('');
+  const contacts = useSelector(getContacts)
+  const dispatch = useDispatch();
+
 
   useEffect(() => {
-  window.localStorage.setItem("contacts", JSON.stringify(contacts));
-}, [contacts]); 
+ dispatch(fetchContacts())
+}, []); 
 
 const addContact = newContact => {
     const { name, number } = newContact;
@@ -22,20 +24,20 @@ const addContact = newContact => {
       return;
     }
 
-    const contact = {
-      id: uuidv4(),
-      name,
-      number,
-    };
+    // const contact = {
+    //   id: uuidv4(),
+    //   name,
+    //   number,
+    // };
  
-   setContacts(prevState => [...prevState, contact]);
+  //  setContacts(prevState => [...prevState, contact]);
  
   };
 
 
  const deleteContact = id => {
-    const updatedContacts = contacts.filter(contact => contact.id !== id);
-    setContacts(updatedContacts);
+    // const updatedContacts = contacts.filter(contact => contact.id !== id);
+    // setContacts(updatedContacts);
     // localStorage.setItem('contacts', JSON.stringify(updatedContacts));
   };
 
