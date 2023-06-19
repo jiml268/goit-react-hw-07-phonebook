@@ -1,32 +1,42 @@
 import React from 'react';
 import css from './ContactForm.module.css';
 import { useState } from 'react';
-import { nanoid } from 'nanoid';
-
-export const ContactForm = ({ addContact }) => {
-  const [state, setState] = useState({
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchContacts, addContacts } from 'redux/operators';
+import { getContacts } from 'redux/selectors';
+export default function ContactForm() {
+   const [formData, setFormData] = useState({
     name: '',
     number: '',
   });
-
-  const handleSubmit = e => {
+  const dispatch = useDispatch();
+  const contacts = useSelector(getContacts);
+  function handleSubmit(e) {
     e.preventDefault();
-    const { name, number } = state;
-    const newContact = {
-      id: nanoid(),
-      name,
-      number,
-    };
-    addContact(newContact);
-    setState({ name: '', number: '' });
-  };
 
-  const onChange = e => {
-    setState(prevState => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }));
-  };
+    if (formData.name === '' || formData.number === '') {
+      return;
+    }
+    const isContactExists = contacts.some(
+      contact => contact.name === formData.name
+    );
+    const isNumberExists = contacts.some(
+      contact => contact.number === formData.number
+    );
+
+    if (isContactExists) {
+      alert(`${formData.name} is already in the contact list`);
+      return;
+    } else if (isNumberExists) {
+      alert(`${formData.number} is already in the contact list`);
+      return;
+    }
+
+    dispatch(addContacts(formData)).then(() => {
+      dispatch(fetchContacts());
+    });
+  }
+
 
   return (
     <form className={css.form} onSubmit={handleSubmit}>
@@ -34,8 +44,13 @@ export const ContactForm = ({ addContact }) => {
         Name
         <input
           className={(css.inputName, css.formInput)}
-          onChange={onChange}
-          value={state.name}
+          onChange={e =>
+            setFormData(prev => ({
+              ...prev,
+              [e.target.name]: e.target.value,
+            }))
+          }
+          value={formData.name}
           type="text"
           name="name"
           pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
@@ -47,8 +62,13 @@ export const ContactForm = ({ addContact }) => {
         Number
         <input
           className={(css.inputNum, css.formInput)}
-          onChange={onChange}
-          value={state.number}
+          onChange={e =>
+            setFormData(prev => ({
+              ...prev,
+              [e.target.name]: e.target.value,
+            }))
+          }
+          value={formData.number}
           type="tel"
           name="number"
           pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"

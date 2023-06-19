@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 // import { v4 as uuidv4 } from 'uuid';
-import { ContactForm } from './ContactForm/ContactForm';
+import ContactForm from './ContactForm/ContactForm';
 import { Filter } from './Filter/Filter'
 import { ContactList } from './ContactList/ContactList';
 import { useSelector, useDispatch } from 'react-redux';
 import { getContacts } from 'redux/selectors';
 import { fetchContacts } from 'redux/operators';
-export const App = () => {
 
+export const App = () => {
   const [filter, setFilter] = useState('');
   const contacts = useSelector(getContacts)
   const dispatch = useDispatch();
@@ -15,24 +15,12 @@ export const App = () => {
 
   useEffect(() => {
  dispatch(fetchContacts())
-}, []); 
+// eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); 
+  
 
-const addContact = newContact => {
-    const { name, number } = newContact;
-    if (contacts.find(contact => contact.name === name && contact.number === number) ) {
-      alert(`A person with the name ${name} and the phone # ${number} already exist in the phone box` );
-      return;
-    }
 
-    // const contact = {
-    //   id: uuidv4(),
-    //   name,
-    //   number,
-    // };
  
-  //  setContacts(prevState => [...prevState, contact]);
- 
-  };
 
 
  const deleteContact = id => {
@@ -80,7 +68,7 @@ const onFilterChange = event => {
       }}
     >
       <h1>Phonebook</h1>
-      <ContactForm addContact={addContact} />
+      <ContactForm />
         <h2> Contacts</h2>
         <Filter filter={filter} handleChange={onFilterChange} />
  <ContactList

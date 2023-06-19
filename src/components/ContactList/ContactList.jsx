@@ -8,7 +8,7 @@ export const ContactList = ({ contacts, handleDelete }) => (
             .sort( (a,b)=>a.name > b.name ? 1 : -1)
             .map((contact, id) => (
         <li key={id} className={css.contactListItem}>
-          {contact.name}: {contact.number}
+          {contact.name}: {contact.phone}
           <button
             type="button"
             className={css.contactListItemBtn}
