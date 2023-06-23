@@ -9,7 +9,7 @@ export const filteredContacts = state => {
   const filtered = selectFilter(state);
 
   return contacts.filter(contact =>
-    contact.name.toLowerCase().includes(filtered) || 
+    contact.name.toLowerCase().includes(filtered.toLowerCase()) || 
     contact.phone.includes(filtered)
   );
 };
