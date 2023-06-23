@@ -1,79 +1,71 @@
-import { useState, useEffect } from 'react';
-// import { v4 as uuidv4 } from 'uuid';
-import ContactForm from './ContactForm/ContactForm';
-import { Filter } from './Filter/Filter'
-import { ContactList } from './ContactList/ContactList';
-import { useSelector, useDispatch } from 'react-redux';
-import { getContacts } from 'redux/selectors';
-import { fetchContacts } from 'redux/operators';
+import React, { useEffect } from 'react';
+import ContactList from './ContactList/ContactList';
+import ContactForm from './ContactForm';
+import Filter from './Filter';
+import { useDispatch, useSelector } from 'react-redux';
+import { FILTER } from '../redux/slice'
+import { fetchContacts, addContact, deleteContact } from 'redux/operations';
+import { selectFilter, filteredContacts, selectIsLoading, selectError } from 'redux/selectors';
+import { Loader } from './Loader/Loader';
 
-export const App = () => {
-  const [filter, setFilter] = useState('');
-  const contacts = useSelector(getContacts)
+
+const App = () => {
+
   const dispatch = useDispatch();
-
+  const filtered = useSelector(selectFilter);
+  const contacts = useSelector(filteredContacts);
+  const isLoading = useSelector(selectIsLoading);
+  const error = useSelector(selectError)
 
   useEffect(() => {
- dispatch(fetchContacts())
-// eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); 
-  
+    dispatch(fetchContacts());
+  }, [dispatch]);
 
-
- 
-
-
- const deleteContact = id => {
-    // const updatedContacts = contacts.filter(contact => contact.id !== id);
-    // setContacts(updatedContacts);
-    // localStorage.setItem('contacts', JSON.stringify(updatedContacts));
-  };
-
-
-const onFilterChange = event => {
-    setFilter(event.target.value);
-  };
-
-  const filterContacts = () => {
-    const query = filter.toLocaleLowerCase();
-
-    const filteredContacts = contacts.filter(contact =>
-      contact.name.toLocaleLowerCase().includes(query) ||
-      contact.number.toLocaleLowerCase().includes(query)
-    );
-
-    if (query && !filteredContacts.length) {
-
-      alert('No contacts matching your request')
+  const handleAddContact = (name, number) => {
+    if (contacts.find(contact => contact.name === name && contact.phone === number )) {
+      alert(`A contact with the name ${name} and number ${number} is already in contacts.`);
+      return;
     }
+    const newContact = {
+      name: name,
+      phone: number
+    };
+    dispatch(addContact(newContact));
+  }
 
-    return filteredContacts;
+  const handleRemoveContact = contactId => {
+    dispatch(deleteContact(contactId));
   };
 
-
-
-
-
-
+  const handleChangeFilter = event => {
+    dispatch(FILTER(event.target.value));
+  };
 
   return (
-    <div
-      style={{
+    <div  style={{
         height: '100vh',
         alignItems: 'center',
         fontSize: 40,
         color: '#010101',
         margin: '0 auto',
         textAlign: 'center'
-      }}
-    >
+      }}>
       <h1>Phonebook</h1>
-      <ContactForm />
-        <h2> Contacts</h2>
-        <Filter filter={filter} handleChange={onFilterChange} />
- <ContactList
-          contacts={filterContacts()}
-          handleDelete={deleteContact}
-        />    </div>
+      <ContactForm onSubmit={handleAddContact} />
+      <h2>Contacts</h2>
+      <div>
+        <p>
+          All contacts: {isLoading ? <Loader /> : contacts.length}
+        </p>
+      </div>
+      <Filter value={filtered} onChange={handleChangeFilter} />
+      {error ? 'can`t load data, please check connection' :
+        <ContactList
+          contacts={contacts}
+          onRemoveContact={handleRemoveContact}
+        />}
+    </div>
   );
-};
+}
+
+export default App;

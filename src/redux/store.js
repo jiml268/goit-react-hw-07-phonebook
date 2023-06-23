@@ -1,8 +1,12 @@
-import { configureStore } from '@reduxjs/toolkit'
-import rootReducer from './slice' 
-  
-const store = configureStore({
-  reducer: rootReducer,
+import { initState } from './constants';
+import { configureStore } from '@reduxjs/toolkit';
+import { phonebookReducer, filterReducer } from '../redux/slice';
+
+export const store = configureStore({
+  preloadedState: initState,
+  reducer: { 
+    contacts: phonebookReducer, 
+    filter: filterReducer },
+  devTools: true, 
 });
 
-export default store;

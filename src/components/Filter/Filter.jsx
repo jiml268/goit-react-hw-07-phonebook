@@ -1,16 +1,20 @@
+import React from 'react';
 import css from './Filter.module.css';
 
-export const Filter = ({ filter, handleChange }) => (
+
+const Filter = ({ value, onChange }) => (
   <div>
-    <label>Find contacts by Name or phone number </label>
-    <input
-      className={css.filterName}
-      type="text"
-      name="filter"
-      placeholder="Enter filter"
-      value={filter}
-      onChange={handleChange}
-    />
+    <label>
+      Find contacts by Name or phone number
+      <input
+              className={css.filterName}
+        placeholder='Find contact'
+        type="name"
+        value={value}
+        onChange={onChange}
+      />
+    </label>
   </div>
 );
 
+export default Filter;
